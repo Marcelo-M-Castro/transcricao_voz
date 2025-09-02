@@ -7,14 +7,10 @@ st.set_page_config(page_title="🎙️ Transcrição de WAV", page_icon="🎧", 
 st.title("🎙️ Transcrição de Áudio (WAV)")
 
 # ------------------------
-# Seleção de modelo
+# Modelo fixo = small (leve para Streamlit Cloud)
 # ------------------------
-model_size = st.selectbox(
-    "Escolha o modelo (recomendado para Streamlit Cloud)",
-    ["small", "medium"],
-    index=1  # medium por padrão
-)
-lang_hint = st.text_input("Idioma (ex: pt, en) - deixe vazio para autodetect", value="pt")
+MODEL_SIZE = "small"
+LANG_HINT = "pt"
 
 # ------------------------
 # Upload de arquivo
@@ -27,11 +23,11 @@ if uploaded_file is not None:
     with open(wav_path, "wb") as f:
         f.write(uploaded_file.getbuffer())
 
-    st.info(f"🔄 Carregando modelo '{model_size}'...")
-    model = whisper.load_model(model_size)
+    st.info(f"🔄 Carregando modelo '{MODEL_SIZE}'...")
+    model = whisper.load_model(MODEL_SIZE)
 
     st.info("🎧 Transcrevendo...")
-    result = model.transcribe(str(wav_path), language=None if not lang_hint else lang_hint)
+    result = model.transcribe(str(wav_path), language=None if not LANG_HINT else LANG_HINT)
 
     transcript_txt = result["text"]
 
